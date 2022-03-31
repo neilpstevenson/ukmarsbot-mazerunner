@@ -115,7 +115,7 @@ void test_controller_tuning(Profile &profile) {
     profile.set_speed(speed);
     report_profile();
   }
-  Serial.println();
+  Serial.println('\r');
   reset_drive_system();
 }
 
@@ -475,7 +475,7 @@ void test_edge_detection() {
   reset_drive_system();
   enable_motor_controllers();
   disable_steering();
-  Serial.println(F("Edge positions:"));
+  Serial.println(F("Edge positions:\r"));
   forward.start(150, 100, 0, 1000);
   while (not forward.is_finished()) {
     if (g_left_wall_sensor > left_max) {
@@ -513,7 +513,7 @@ void test_edge_detection() {
   } else {
     Serial.print('-');
   }
-  Serial.println();
+  Serial.println('\r');
 
   reset_drive_system();
   disable_sensors();
@@ -534,22 +534,22 @@ void run_test(int test) {
   switch (test) {
     case 0:
       // ui
-      Serial.println(F("OK"));
+      Serial.println(F("OK\r"));
       break;
     case 1:
       report_sensor_calibration();
       break;
     case 2:
       load_settings_from_eeprom();
-      Serial.println(F("OK - Settings read from EEPROM, changes lost"));
+      Serial.println(F("OK - Settings read from EEPROM, changes lost\r"));
       break;
     case 3:
       save_settings_to_eeprom();
-      Serial.println(F("OK - Settings written to EEPROM"));
+      Serial.println(F("OK - Settings written to EEPROM\r"));
       break;
     case 4:
       settings = defaults;
-      Serial.println(F("OK - Settings cleared to defaults"));
+      Serial.println(F("OK - Settings cleared to defaults\r"));
       break;
     case 5:
       test_calibrate_encoders();

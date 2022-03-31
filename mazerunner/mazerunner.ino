@@ -62,7 +62,7 @@ void setup() {
   setup_adc();
   Serial.println();
   disable_sensors();
-  Serial.println(F("RDY"));
+  Serial.println(F("RDY\r"));
 }
 
 void loop() {

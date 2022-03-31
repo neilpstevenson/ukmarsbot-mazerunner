@@ -201,6 +201,12 @@ float update_wall_sensors() {
   g_right_wall_present = g_right_wall_sensor > settings.right_threshold;
   g_front_wall_present = g_front_wall_sensor > settings.front_threshold;
 
+// Show on indicator LEDs
+  digitalWriteFast(LED_LEFT, g_left_wall_present);
+  digitalWriteFast(LED_RIGHT, g_right_wall_present);
+  digitalWriteFast(LED_MAIN, g_front_wall_present);
+
+
   // calculate the alignment errors - too far left is negative
   float error = 0;
   float right_error = settings.right_nominal - g_right_wall_sensor;

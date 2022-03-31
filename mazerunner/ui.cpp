@@ -230,8 +230,8 @@ int cli_read_line() {
   while (Serial.available()) {
     char c = Serial.read();
     // TODO : add single character priority commands like Abort
-    if (c == '\n') {
-      Serial.println();
+    if (c == '\n' || c == '\r') {
+      Serial.println('\r');
       return 1;
     } else if (c == 8) {
       if (s_index > 0) {
@@ -275,7 +275,7 @@ Args cli_split_line() {
 }
 
 void cli_prompt() {
-  Serial.print('\n');
+  Serial.print("\n\r");
   Serial.print('>');
   Serial.print(' ');
 }
@@ -292,7 +292,7 @@ void cli_interpret(const Args &args) {
         print_maze_plain();
         break;
       case 'X':
-        Serial.println(F("Reset Maze"));
+        Serial.println(F("Reset Maze\r"));
         initialise_maze(emptyMaze);
         break;
       case 'R':

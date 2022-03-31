@@ -46,7 +46,7 @@ static uint32_t report_interval = REPORTING_INTERVAL;
 // 64 characters will take about 6ms to go out over the wire.
 void report_profile_header() {
 #if DEBUG_LOGGING == 1
-  Serial.println(F("time robotPos robotAngle fwdPos  fwdSpeed rotpos rotSpeed fwdVolts rotVolts"));
+  Serial.println(F("time robotPos robotAngle fwdPos  fwdSpeed rotpos rotSpeed fwdVolts rotVolts\r"));
   start_time = millis();
   report_time = start_time;
 #endif
@@ -73,7 +73,7 @@ void report_profile() {
     Serial.print(50 * (g_right_motor_volts + g_left_motor_volts));
     Serial.print(' ');
     Serial.print(50 * (g_right_motor_volts - g_left_motor_volts));
-    Serial.println();
+    Serial.println('\r');
   }
 #else
   delay(2);
@@ -83,7 +83,7 @@ void report_profile() {
 //***************************************************************************//
 
 void report_sensor_calibration() {
-  Serial.println(F("left left_ref front front_ref right right_ref"));
+  Serial.println(F("left left_ref front front_ref right right_ref\r"));
   enable_sensors();
   start_time = millis();
   report_time = start_time;
@@ -93,7 +93,7 @@ void report_sensor_calibration() {
       report_wall_sensors();
     }
   }
-  Serial.println();
+  Serial.println('\r');
   wait_for_button_release();
   delay(200);
   disable_sensors();
@@ -102,7 +102,7 @@ void report_sensor_calibration() {
 
 void report_sensor_track_header() {
 #if DEBUG_LOGGING == 1
-  Serial.println(F("time pos angle left right front error adjustment"));
+  Serial.println(F("time pos angle left right front error adjustment\r"));
   start_time = millis();
   report_time = start_time;
 #endif
@@ -127,7 +127,7 @@ void report_sensor_track() {
     Serial.print(g_cross_track_error);
     Serial.print(' ');
     Serial.print(g_steering_adjustment);
-    Serial.println();
+    Serial.println('\r');
   }
 #else
   delay(2);
@@ -153,7 +153,7 @@ void report_sensor_track_raw() {
     Serial.print(g_cross_track_error);
     Serial.print(' ');
     Serial.print(g_steering_adjustment);
-    Serial.println();
+    Serial.println('\r');
   }
 #else
   delay(2);
@@ -162,7 +162,7 @@ void report_sensor_track_raw() {
 
 void report_front_sensor_track_header() {
 #if DEBUG_LOGGING == 1
-  Serial.println(F("time pos front_normal front_raw"));
+  Serial.println(F("time pos front_normal front_raw\r"));
   start_time = millis();
   report_time = start_time;
 #endif
@@ -179,7 +179,7 @@ void report_front_sensor_track() {
     Serial.print(g_front_wall_sensor);
     Serial.print(' ');
     Serial.print(g_front_wall_sensor_raw);
-    Serial.println();
+    Serial.println('\r');
   }
 #else
   delay(2);
@@ -190,7 +190,7 @@ void report_front_sensor_track() {
 
 void report_encoder_header() {
 #if DEBUG_LOGGING == 1
-  Serial.println(F("left right position angle"));
+  Serial.println(F("left right position angle\r"));
   start_time = millis();
   report_time = start_time;
 #endif
@@ -207,7 +207,7 @@ void report_encoders() {
     Serial.print(int(robot_position()));
     Serial.print(' ');
     Serial.print(int(robot_angle()));
-    Serial.println();
+    Serial.println('\r');
   }
 #else
   delay(2);
@@ -222,12 +222,12 @@ void report_pose() {
   Serial.print(robot_angle());
   Serial.print(F(" Position (mm): "));
   Serial.print(robot_position());
-  Serial.println();
+  Serial.println('\r');
   Serial.print(F(" fwd : "));
   Serial.print(forward.position());
   Serial.print(F(" rot : "));
   Serial.print(rotation.position());
-  Serial.println();
+  Serial.println('\r');
 #else
   delay(2);
 #endif
@@ -250,7 +250,7 @@ void report_wall_sensors() {
     front_raw = g_front_wall_sensor_raw;
     right_raw = g_right_wall_sensor_raw;
   }
-  Serial.print('\n');
+  Serial.print("\n\r");
   Serial.print(left);
   Serial.print('(');
   Serial.print(left_raw);
@@ -259,6 +259,10 @@ void report_wall_sensors() {
   Serial.print(front);
   Serial.print('(');
   Serial.print(front_raw);
+//  Serial.print('/');
+//  Serial.print(FRONT_CALIBRATION);
+//  Serial.print('/');
+//  Serial.print(FRONT_SCALE);
   Serial.print(')');
   Serial.print(' ');
   Serial.print(right);
@@ -312,7 +316,7 @@ void printNorthWalls(int row) {
       Serial.print(("   "));
     }
   }
-  Serial.println('o');
+  Serial.println("o\r");
 }
 
 void printSouthWalls(int row) {
@@ -325,11 +329,11 @@ void printSouthWalls(int row) {
       Serial.print(("   "));
     }
   }
-  Serial.println('o');
+  Serial.println("o\r");
 }
 
 void print_maze_plain() {
-  Serial.println();
+  Serial.println('\r');
   for (int row = 15; row >= 0; row--) {
     printNorthWalls(row);
     for (int col = 0; col < 16; col++) {
@@ -340,15 +344,15 @@ void print_maze_plain() {
         Serial.print(("|   "));
       }
     }
-    Serial.println('|');
+    Serial.println("|\r");
   }
   printSouthWalls(0);
-  Serial.println();
+  Serial.println('\r');
   ;
 }
 
 void print_maze_with_costs() {
-  Serial.println();
+  Serial.println('\r');
   ;
   for (int row = 15; row >= 0; row--) {
     printNorthWalls(row);
@@ -361,17 +365,17 @@ void print_maze_with_costs() {
       }
       print_justified(cost[cell], 3);
     }
-    Serial.println('|');
+    Serial.println("|\r");
   }
   printSouthWalls(0);
-  Serial.println();
+  Serial.println('\r');
   ;
 }
 
 static char dirChars[] = "^>v<*";
 
 void print_maze_with_directions() {
-  Serial.println();
+  Serial.println('\r');
   flood_maze(maze_goal());
   for (int row = 15; row >= 0; row--) {
     printNorthWalls(row);
@@ -390,15 +394,15 @@ void print_maze_with_directions() {
       Serial.print(dirChars[direction]);
       Serial.print(' ');
     }
-    Serial.println('|');
+    Serial.println("|\r");
   }
   printSouthWalls(0);
-  Serial.println();
+  Serial.println('\r');
   ;
 }
 
 void print_maze_wall_data() {
-  Serial.println();
+  Serial.println('\r');
   ;
   for (int row = 15; row >= 0; row--) {
     for (int col = 0; col < 16; col++) {
@@ -406,9 +410,9 @@ void print_maze_wall_data() {
       print_hex_2(walls[cell]);
       Serial.print(' ');
     }
-    Serial.println();
+    Serial.println('\r');
     ;
   }
-  Serial.println();
+  Serial.println('\r');
   ;
 }

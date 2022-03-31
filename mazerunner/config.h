@@ -36,7 +36,7 @@
 #include <arduino.h>
 
 // force rewrite of EEPROM settings. Set this when developing
-#define ALWAYS_USE_DEFAULT_SETTINGS 0
+#define ALWAYS_USE_DEFAULT_SETTINGS 1
 //***************************************************************************//
 // USER_MODE tells the software whether to run the built-in tests or custom 
 // user-provided routines. When set to false, execution is directed to the 
@@ -47,12 +47,12 @@
 // In that file you will find some examples that you can modify, extend or
 // replace as you see fit.
 
-const bool USER_MODE = false;
+const bool USER_MODE = true; //false;
 
 //***************************************************************************//
 // We need to know about the drive mechanics.
 
-const float WHEEL_DIAMETER = 31.966; //33.298; // Adjust on test
+const float WHEEL_DIAMETER = 30.93;//33.10; //31.966; //33.298; // Adjust on test
 const float ENCODER_PULSES = 12.0;
 const float GEAR_RATIO = 19.54;
 
@@ -60,11 +60,11 @@ const float GEAR_RATIO = 19.54;
 // A good starting approximation is half the distance between the wheel centres.
 // After testing, you may find the working value to be larger or smaller by some
 // small amount.
-const float MOUSE_RADIUS = 37.92; //39.50; // Adjust on test
+const float MOUSE_RADIUS = 40.80; //41.00; //40.05; //43.10; //40.05; //37.92; //39.50; // Adjust on test
 
 // The robot is likely to have wheels of different diameters and that must be
 // compensated for if the robot is to reliably drive in a straight line
-const float ROTATION_BIAS = 0.0025; // Negative makes robot curve to left
+const float ROTATION_BIAS = 0; //0.0025; // Negative makes robot curve to left
 
 //***************************************************************************//
 
@@ -136,8 +136,8 @@ const float SPEED_FF = (1.0 / 280.0);
 const float BIAS_FF = (23.0 / 280.0);
 
 // encoder polarity is set to account for reversal of the encoder phases
-const int ENCODER_LEFT_POLARITY = (-1);
-const int ENCODER_RIGHT_POLARITY = (1);
+const int ENCODER_LEFT_POLARITY = (1);
+const int ENCODER_RIGHT_POLARITY = (-1);
 
 // similarly, the motors may be wired with different polarity and that
 // is defined here so that setting a positive voltage always moves the robot
@@ -158,11 +158,11 @@ const float DEFAULT_SEARCH_ACCEL = 2000;
 //***** SENSOR CALIBRATION **************************************************//
 // wall sensor thresholds and constants
 // RAW values for the front sensor when the robot is backed up to a wall
-const int FRONT_CALIBRATION = 70;
+const int FRONT_CALIBRATION = 200; //145; //70;
 // RAW values for the side sensors when the robot is centred in a cell
 // and there is no wall ahead
-const int LEFT_CALIBRATION = 97;
-const int RIGHT_CALIBRATION = 92;
+const int LEFT_CALIBRATION = 196; //97;
+const int RIGHT_CALIBRATION = 166;//196; //92;
 
 // This is the normalised value seen by the front sensor when the mouse is
 // in its calibration position
@@ -176,10 +176,11 @@ const float LEFT_SCALE = (float)LEFT_NOMINAL / LEFT_CALIBRATION;
 const float RIGHT_SCALE = (float)RIGHT_NOMINAL / RIGHT_CALIBRATION;
 
 // the values above which, a wall is seen
-const int LEFT_THRESHOLD = 40;   // minimum value to register a wall
-const int FRONT_THRESHOLD = 20;  // minimum value to register a wall
-const int RIGHT_THRESHOLD = 40;  // minimum value to register a wall
-const int FRONT_REFERENCE = 850; // reading when mouse centered with wall ahead
+const int LEFT_THRESHOLD = 28;//40;   // minimum value to register a wall
+const int FRONT_THRESHOLD = 40;//20;  // minimum value to register a wall
+const int RIGHT_THRESHOLD = 28;//40;  // minimum value to register a wall
+const int FRONT_REFERENCE = 360;//850; // reading when mouse centered with wall ahead
+const int FRONT_START_TURN = 47;//54;  // reading for start of right/left turn with wall ahead
 //***************************************************************************//
 //***************************************************************************//
 // Some physical constants that are likely to be board -specific
@@ -202,7 +203,7 @@ const int EEPROM_ADDR_SETTINGS = 0x0000;
 
 //***************************************************************************//
 // set this to zero to disable profile data logging over serial
-#define DEBUG_LOGGING 0
+#define DEBUG_LOGGING 1
 // time between logged lined when reporting is enabled (milliseconds)
 const int REPORTING_INTERVAL = 10;
 
@@ -224,6 +225,7 @@ const uint8_t LED_LEFT = 11; // an alias for EMITTER_B
 const uint8_t EMITTER_A = 11;
 const uint8_t EMITTER_B = 12;
 const uint8_t EMITTER = 12; // alias for pin 12
+const uint8_t LED_MAIN = 13; // main board LED
 
 // these are the sensor ADC channels in case we have no special use for a given channel
 const uint8_t SENSOR_0 = A0;

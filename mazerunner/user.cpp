@@ -40,6 +40,7 @@
 #include "reports.h"
 #include "sensors.h"
 #include "tests.h"
+#include "LineFollower.h"
 #include <Arduino.h>
 
 // to avoid conflicts with other code, you might want to name all the functions
@@ -75,7 +76,7 @@ void user_test_back_wall_start() {
 void run_mouse(int function) {
   switch (function) {
     case 0:
-      Serial.println(F("OK"));
+      Serial.println(F("OK\r"));
       break;
     case 1:
       // enter your function call here
@@ -113,7 +114,7 @@ void run_mouse(int function) {
         print_justified(forward.position(), 4);
         Serial.print(' ');
         print_justified(get_front_sensor(), 3);
-        Serial.println();
+        Serial.println('\r');
         rotation.start(angle, omega, 0, alpha);
         while (not rotation.is_finished()) {
           delay(2);
@@ -149,7 +150,7 @@ void run_mouse(int function) {
         print_justified(forward.position(), 4);
         Serial.print(' ');
         print_justified(get_front_sensor(), 3);
-        Serial.println();
+        Serial.println('\r');
         rotation.start(angle, omega, 0, alpha);
         while (not rotation.is_finished()) {
           delay(2);
@@ -162,6 +163,16 @@ void run_mouse(int function) {
       }
       break;
     case 6:
+      // Line Follower - simple
+      LineFollower follower;
+      reset_drive_system();
+      enable_motor_controllers();
+
+      follower.follow_line();
+      
+      disable_sensors();
+      reset_drive_system();
+
       break;
     case 7:
       // enter your function call here
@@ -178,7 +189,7 @@ void run_mouse(int function) {
       Serial.print('@');
       print_justified((int)forward.position(), 4);
       Serial.print(' ');
-      Serial.println();
+      Serial.println('\r');
       break;
     case 8:
       // enter your function call here
@@ -195,7 +206,7 @@ void run_mouse(int function) {
       Serial.print('@');
       print_justified((int)forward.position(), 4);
       Serial.print(' ');
-      Serial.println();
+      Serial.println('\r');
 
       break;
     case 9: {
@@ -207,7 +218,7 @@ void run_mouse(int function) {
         report_profile();
       }
       forward.stop();
-      Serial.println();
+      Serial.println('\r');
       uint32_t t = millis() + 200;
       while (millis() < t) {
         report_profile();
@@ -231,18 +242,20 @@ void run_mouse(int function) {
       user_test_back_wall_start();
       break;
     case 14:
-      Serial.println("Search TO");
+      Serial.println("Search TO\r");
       dorothy.handStart = true;
       dorothy.location = START;
       dorothy.heading = NORTH;
       dorothy.search_to(maze_goal());
       dorothy.handStart = false;
       dorothy.search_to(START);
+
       dorothy.search_to(maze_goal());
+      dorothy.search_to(START);
 
       break;
     case 15:
-      Serial.println("Follow TO");
+      Serial.println("Follow TO\r");
       dorothy.follow_to(maze_goal());
       break;
     default:

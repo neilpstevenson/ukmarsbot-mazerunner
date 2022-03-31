@@ -134,7 +134,7 @@ void Mouse::end_run() {
   float remaining = 270 - forward.position();
   forward.start(remaining, forward.speed(), 30, forward.acceleration());
   if (has_wall) {
-    while (get_front_sensor() < 850) {
+    while (get_front_sensor() < FRONT_REFERENCE) {
       delay(2);
     }
   } else {
@@ -177,7 +177,7 @@ void Mouse::turn_SS90ER() {
   forward.start(distance, forward.speed(), DEFAULT_TURN_SPEED, SEARCH_ACCELERATION);
   while (not forward.is_finished()) {
     delay(2);
-    if (g_front_wall_sensor > 54) {
+    if (g_front_wall_sensor > FRONT_START_TURN) {
       forward.set_state(CS_FINISHED);
       triggered = true;
     }
@@ -194,6 +194,9 @@ void Mouse::turn_SS90ER() {
   forward.start(run_out, forward.speed(), DEFAULT_SEARCH_SPEED, SEARCH_ACCELERATION);
   while (not forward.is_finished()) {
     delay(2);
+    if (g_front_wall_sensor > FRONT_REFERENCE) {
+      forward.set_state(CS_FINISHED);
+    }
   }
   forward.set_position(170);
 }
@@ -210,7 +213,7 @@ void Mouse::turn_SS90EL() {
   forward.start(distance, forward.speed(), DEFAULT_TURN_SPEED, SEARCH_ACCELERATION);
   while (not forward.is_finished()) {
     delay(2);
-    if (g_front_wall_sensor > 54) {
+    if (g_front_wall_sensor > FRONT_START_TURN) {
       forward.set_state(CS_FINISHED);
       triggered = true;
     }
@@ -227,6 +230,9 @@ void Mouse::turn_SS90EL() {
   forward.start(run_out, forward.speed(), DEFAULT_SEARCH_SPEED, SEARCH_ACCELERATION);
   while (not forward.is_finished()) {
     delay(2);
+    if (g_front_wall_sensor > FRONT_REFERENCE) {
+      forward.set_state(CS_FINISHED);
+    }
   }
   forward.set_position(170);
 }
@@ -323,14 +329,14 @@ void Mouse::follow_to(unsigned char target) {
     delay(2);
   }
   forward.set_position(90);
-  Serial.println(F("Off we go..."));
+  Serial.println(F("Off we go...\r"));
   wait_until_position(170);
   // at the start of this loop we are always at the sensing point
   while (location != target) {
     if (button_pressed()) {
       break;
     }
-    Serial.println();
+    Serial.println('\r');
     log_status('-');
     enable_steering();
     location = neighbour(location, heading);
@@ -365,8 +371,8 @@ void Mouse::follow_to(unsigned char target) {
       log_status('x');
     }
   }
-  Serial.println();
-  Serial.println(F("Arrived!  "));
+  Serial.println('\r');
+  Serial.println(F("Arrived!\r"));
   for (int i = 0; i < 4; i++) {
     disable_sensors();
     delay(250);
@@ -398,7 +404,7 @@ void Mouse::report_status() {
   } else {
     Serial.print('-');
   }
-  Serial.println();
+  Serial.println('\r');
 }
 
 /***
@@ -441,14 +447,14 @@ int Mouse::search_to(unsigned char target) {
     delay(2);
   }
   forward.set_position(90);
-  Serial.println(F("Off we go..."));
+  Serial.println(F("Off we go...\r"));
   wait_until_position(170);
   // TODO. the robot needs to start each iteration at the sensing point
   while (location != target) {
     if (button_pressed()) {
       break;
     }
-    Serial.println();
+    Serial.println('\r');
     log_status('-');
     enable_steering();
     location = neighbour(location, heading);
@@ -492,8 +498,8 @@ int Mouse::search_to(unsigned char target) {
       }
     }
   }
-  Serial.println();
-  Serial.println(F("Arrived!  "));
+  Serial.println('\r');
+  Serial.println(F("Arrived!\r"));
   for (int i = 0; i < 4; i++) {
     disable_sensors();
     delay(250);
@@ -786,11 +792,11 @@ int Mouse::run_maze() {
     flood_maze(maze_goal());
     make_path(location);
     wait_for_front_sensor();
-    Serial.println(F("Running in place"));
+    Serial.println(F("Running in place\r"));
     run_in_place_turns(SPEEDMAX_STRAIGHT);
-    Serial.println(F("Returning"));
+    Serial.println(F("Returning\r"));
     search_to(START);
-    Serial.println(F("Done"));
+    Serial.println(F("Done\r"));
     p_mouse_state = SMOOTH_RUN;
   }
   if (p_mouse_state == SMOOTH_RUN) {
@@ -800,11 +806,11 @@ int Mouse::run_maze() {
     turn_to_face(direction_to_smallest(location, heading));
     delay(200);
     wait_for_front_sensor();
-    Serial.println(F("Running smooth"));
+    Serial.println(F("Running smooth\r"));
     run_smooth_turns(SPEEDMAX_STRAIGHT);
-    Serial.println(F("Returning"));
+    Serial.println(F("Returning\r"));
     search_to(START);
-    Serial.println(F("Finished"));
+    Serial.println(F("Finished\r"));
     p_mouse_state = FINISHED;
   }
   stop_motors();
@@ -1035,5 +1041,5 @@ void Mouse::print_path() {
   for (int i = 0; i < 128 && path[i]; i++) {
     Serial.print(path[i]);
   }
-  Serial.println();
+  Serial.println('\r');
 }

@@ -116,44 +116,44 @@ const int get_settings_count() {
  * device.
  */
 void dump_settings(const int dp) {
-  Serial.println();
+  Serial.println('\r');
   for (int i = 0; i < get_settings_count(); i++) {
     Serial.print('$');
     Serial.print(i);
     Serial.print('=');
     print_setting_value(i, dp);
-    Serial.println();
+    Serial.println('\r');
   }
 }
 
 void dump_settings_detail(const int dp) {
-  Serial.println();
+  Serial.println('\r');
   for (int i = 0; i < get_settings_count(); i++) {
     print_setting_details(i, dp);
-    Serial.println(';');
+    Serial.println(";\r");
   }
 }
 
 void reset_eeprom_settings_to_defaults() {
-  Serial.println(F("Settings restored to  defaults"));
+  Serial.println(F("Settings restored to  defaults\r"));
   restore_default_settings();
   save_settings_to_eeprom();
 }
 
 void save_settings_to_eeprom() {
-  Serial.println(F("Settings saved"));
+  Serial.println(F("Settings saved\r"));
   EEPROM.put(SETTINGS_EEPROM_ADDRESS, settings);
 }
 
 void load_settings_from_eeprom(bool verbose) {
   Settings eeprom_settings;
-  Serial.println(F("Settings loaded"));
+  Serial.println(F("Settings loaded\r"));
   EEPROM.get(SETTINGS_EEPROM_ADDRESS, eeprom_settings);
   if (eeprom_settings.revision == SETTINGS_REVISION) {
     settings = eeprom_settings;
   } else {
     if (verbose) {
-      Serial.println(F("settings updated."));
+      Serial.println(F("settings updated.\r"));
       dump_settings_detail();
     }
     reset_eeprom_settings_to_defaults();

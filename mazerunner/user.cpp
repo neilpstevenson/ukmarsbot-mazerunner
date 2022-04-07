@@ -40,7 +40,7 @@
 #include "reports.h"
 #include "sensors.h"
 #include "tests.h"
-#include "LineFollower.h"
+//#include "LineFollower.h"
 #include <Arduino.h>
 
 // to avoid conflicts with other code, you might want to name all the functions
@@ -74,6 +74,9 @@ void user_test_back_wall_start() {
 }
 
 void run_mouse(int function) {
+  Serial.print("User mode ");
+  Serial.print(function);
+  Serial.println('\r');
   switch (function) {
     case 0:
       Serial.println(F("OK\r"));
@@ -85,7 +88,19 @@ void run_mouse(int function) {
       break;
     case 2:
       // enter your function call here
-      dorothy.report_status();
+      enable_sensors();
+      while(1)
+      {
+        dorothy.update_sensors();
+        print_justified(get_left_sensor(), 3);
+        Serial.print('/');
+        print_justified(get_front_sensor(), 3);
+        Serial.print('/');
+        print_justified(get_right_sensor(), 3);
+        Serial.print(' ');
+        dorothy.report_status();
+        delay(50);
+      }
       break;
     case 3:
       // enter your function call here
@@ -164,7 +179,7 @@ void run_mouse(int function) {
       break;
     case 6:
       // Line Follower - simple
-      LineFollower follower;
+   /*   LineFollower follower;
       reset_drive_system();
       enable_motor_controllers();
 
@@ -172,7 +187,7 @@ void run_mouse(int function) {
       
       disable_sensors();
       reset_drive_system();
-
+*/
       break;
     case 7:
       // enter your function call here

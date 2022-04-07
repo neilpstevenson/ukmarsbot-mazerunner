@@ -177,9 +177,9 @@ const float RIGHT_SCALE = (float)RIGHT_NOMINAL / RIGHT_CALIBRATION;
 
 // the values above which, a wall is seen
 const int LEFT_THRESHOLD = 28;//40;   // minimum value to register a wall
-const int FRONT_THRESHOLD = 40;//20;  // minimum value to register a wall
+const int FRONT_THRESHOLD = 24; //40;//20;  // minimum value to register a wall
 const int RIGHT_THRESHOLD = 28;//40;  // minimum value to register a wall
-const int FRONT_REFERENCE = 360;//850; // reading when mouse centered with wall ahead
+const int FRONT_REFERENCE = 300; //360;//850; // reading when mouse centered with wall ahead
 const int FRONT_START_TURN = 47;//54;  // reading for start of right/left turn with wall ahead
 //***************************************************************************//
 //***************************************************************************//

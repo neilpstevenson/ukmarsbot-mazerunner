@@ -531,6 +531,9 @@ void test_edge_detection() {
  * @brief Uses the DIP switches to decide which test to run
  */
 void run_test(int test) {
+  Serial.print("Test mode ");
+  Serial.print(test);
+  Serial.print('\n');
   switch (test) {
     case 0:
       // ui

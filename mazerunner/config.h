@@ -60,7 +60,7 @@ const float GEAR_RATIO = 19.54;
 // A good starting approximation is half the distance between the wheel centres.
 // After testing, you may find the working value to be larger or smaller by some
 // small amount.
-const float MOUSE_RADIUS = 40.80; //41.00; //40.05; //43.10; //40.05; //37.92; //39.50; // Adjust on test
+const float MOUSE_RADIUS = 40.7; //40.80; //41.00; //40.05; //43.10; //40.05; //37.92; //39.50; // Adjust on test
 
 // The robot is likely to have wheels of different diameters and that must be
 // compensated for if the robot is to reliably drive in a straight line
@@ -179,7 +179,8 @@ const float RIGHT_SCALE = (float)RIGHT_NOMINAL / RIGHT_CALIBRATION;
 const int LEFT_THRESHOLD = 28;//40;   // minimum value to register a wall
 const int FRONT_THRESHOLD = 24; //40;//20;  // minimum value to register a wall
 const int RIGHT_THRESHOLD = 28;//40;  // minimum value to register a wall
-const int FRONT_REFERENCE = 300; //360;//850; // reading when mouse centered with wall ahead
+const int FRONT_REFERENCE = 280; //360;//850; // reading when mouse centered with wall ahead
+const int FRONT_TURN_REFERENCE = 360; // reading when mouse centered with wall ahead
 const int FRONT_START_TURN = 47;//54;  // reading for start of right/left turn with wall ahead
 //***************************************************************************//
 //***************************************************************************//

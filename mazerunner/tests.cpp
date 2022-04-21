@@ -149,8 +149,8 @@ void test_controller_tuning(Profile &profile) {
  * @brief perform n * 360 degree turn-in-place
  */
 void test_spin_turn(float angle) {
-  float max_speed = 720.0;     // deg/s
-  float acceleration = 4320.0; // deg/s/s
+  float max_speed = 360;//720.0;     // deg/s
+  float acceleration = 3600; //4320.0; // deg/s/s
   report_profile_header();
   reset_drive_system();
   enable_motor_controllers();

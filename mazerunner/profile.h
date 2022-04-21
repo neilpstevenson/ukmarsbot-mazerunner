@@ -99,8 +99,9 @@ class Profile {
   void stop() {
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
       m_target_speed = 0;
+      m_state = CS_FINISHED;
     }
-    finish();
+//    finish();
   }
 
   void finish() {

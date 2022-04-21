@@ -242,11 +242,69 @@ void run_mouse(int function) {
     } break;
     case 10:
       // enter your function call here
-      test_spin_turn(360);
+      //test_spin_turn(-180);
+      reset_drive_system();
+      enable_motor_controllers();
+      spin_turn(-180, SPEEDMAX_SPIN_TURN, SPIN_TURN_ACCELERATION);
+      forward.start(80, SPEEDMAX_EXPLORE, SPEEDMAX_EXPLORE, SEARCH_ACCELERATION);
+      while (not forward.is_finished()) {
+        delay(2);
+      }
+      reset_drive_system();
       break;
     case 11:
       // reserved
-      test_spin_turn(90);
+      //test_spin_turn(90);
+      delay(1000);
+      /*
+      enable_sensors();
+      reset_drive_system();
+      enable_motor_controllers();
+      
+      forward.start(BACK_WALL_TO_CENTER, SPEEDMAX_EXPLORE, SPEEDMAX_EXPLORE, SEARCH_ACCELERATION);
+      while (not forward.is_finished()) {
+        delay(2);
+      }
+      forward.set_position(90);
+      wait_until_position(170);
+
+      const bool updateSensors = true;
+      enable_steering();
+      if(updateSensors) dorothy.update_sensors();
+      forward.adjust_position(-180);
+      wait_until_position(170);
+      
+      enable_steering();
+      if(updateSensors) dorothy.update_sensors();
+      forward.adjust_position(-180);
+      wait_until_position(170);
+      
+      enable_steering();
+      if(updateSensors) dorothy.update_sensors();
+      dorothy.turn_SS90ER();
+      
+      enable_steering();
+      if(updateSensors) dorothy.update_sensors();
+      forward.adjust_position(-180);
+      wait_until_position(170);
+      
+      enable_steering();
+      if(updateSensors) dorothy.update_sensors();
+      dorothy.frontWall = true; ////////////////////
+      dorothy.turn_around();
+
+      enable_steering();
+      if(updateSensors) dorothy.update_sensors();
+      dorothy.turn_SS90ER();
+
+//      enable_steering();
+  //    forward.adjust_position(-180);
+    //  wait_until_position(170);
+      
+      //dorothy.turn_SS90ER();
+      //dorothy.turn_SS90EL();
+      */
+      reset_drive_system();
       break;
     case 12:
       // reserved
@@ -254,7 +312,9 @@ void run_mouse(int function) {
       break;
     case 13:
       // reserved
-      user_test_back_wall_start();
+      //user_test_back_wall_start();
+      Serial.println("Run Maze\r");
+      dorothy.run_maze();
       break;
     case 14:
       Serial.println("Search TO\r");

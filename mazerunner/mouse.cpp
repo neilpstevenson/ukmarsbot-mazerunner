@@ -40,6 +40,7 @@
 #include "reports.h"
 #include "sensors.h"
 #include "ui.h"
+#include "digitalWriteFast.h"
 
 Mouse dorothy;
 
@@ -65,6 +66,15 @@ void print_walls() {
   } else {
     Serial.print('-');
   }
+}
+
+void debug_toggle_led()
+{
+  static int state = 0;
+  if(++state & 1)
+    digitalWriteFast(LED_MAIN, HIGH)
+  else
+    digitalWriteFast(LED_MAIN, LOW);
 }
 //***************************************************************************//
 /**
@@ -166,7 +176,7 @@ void Mouse::end_run() {
  */
 void Mouse::turn_SS90ER() {
 
-  float run_in = 5.0;   // mm
+  float run_in = 15.0;   // mm
   float run_out = 10.0; // mm
   float angle = -90.0;  // deg
   float omega = 280;    // deg/s
@@ -194,7 +204,7 @@ void Mouse::turn_SS90ER() {
   forward.start(run_out, forward.speed(), DEFAULT_SEARCH_SPEED, SEARCH_ACCELERATION);
   while (not forward.is_finished()) {
     delay(2);
-    if (g_front_wall_sensor > FRONT_REFERENCE) {
+    if (g_front_wall_sensor > FRONT_TURN_REFERENCE) {
       forward.set_state(CS_FINISHED);
     }
   }
@@ -202,7 +212,7 @@ void Mouse::turn_SS90ER() {
 }
 
 void Mouse::turn_SS90EL() {
-  float run_in = 5.0;   // mm
+  float run_in = 15.0;   // mm
   float run_out = 10.0; // mm
   float angle = 90.0;   // deg
   float omega = 280;    // deg/s
@@ -230,7 +240,7 @@ void Mouse::turn_SS90EL() {
   forward.start(run_out, forward.speed(), DEFAULT_SEARCH_SPEED, SEARCH_ACCELERATION);
   while (not forward.is_finished()) {
     delay(2);
-    if (g_front_wall_sensor > FRONT_REFERENCE) {
+    if (g_front_wall_sensor > FRONT_TURN_REFERENCE) {
       forward.set_state(CS_FINISHED);
     }
   }
@@ -267,6 +277,7 @@ void Mouse::turn_around() {
   // Be sure robot has come to a halt.
   forward.stop();
   spin_turn(-180, SPEEDMAX_SPIN_TURN, SPIN_TURN_ACCELERATION);
+  enable_steering();
   forward.start(80, SPEEDMAX_EXPLORE, SPEEDMAX_EXPLORE, SEARCH_ACCELERATION);
   while (not forward.is_finished()) {
     delay(2);
@@ -454,6 +465,7 @@ int Mouse::search_to(unsigned char target) {
     if (button_pressed()) {
       break;
     }
+    debug_toggle_led();
     Serial.println('\r');
     log_status('-');
     enable_steering();

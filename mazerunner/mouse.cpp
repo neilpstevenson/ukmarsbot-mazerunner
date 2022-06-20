@@ -488,6 +488,7 @@ int Mouse::search_to(unsigned char target) {
       switch (hdgChange) {
         case 0: // ahead
           forward.adjust_position(-180);
+          forward.set_target_speed(SPEEDMAX_EXPLORE);
           log_status('F');
           wait_until_position(170);
           log_status('x');

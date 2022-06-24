@@ -42,7 +42,7 @@
 #include "ui.h"
 #include "digitalWriteFast.h"
 
-Mouse dorothy;
+//Mouse dorothy;
 
 char path[128];
 char commands[128];
@@ -176,15 +176,15 @@ void Mouse::end_run() {
  */
 void Mouse::turn_SS90ER() {
 
-  float run_in = 15.0;   // mm
-  float run_out = 10.0; // mm
+  float run_in = 10.0;   // mm
+  float run_out = 2.0; // mm
   float angle = -90.0;  // deg
   float omega = 280;    // deg/s
   float alpha = 4000;   // deg/s/s
   bool triggered = false;
   disable_steering();
   float distance = 190.0 + run_in - forward.position();
-  forward.start(distance, forward.speed(), DEFAULT_TURN_SPEED, SEARCH_ACCELERATION);
+  forward.start(distance, forward.speed(), turnSpeed, SEARCH_ACCELERATION);
   while (not forward.is_finished()) {
     delay(2);
     if (g_front_wall_sensor > FRONT_START_TURN) {
@@ -212,15 +212,15 @@ void Mouse::turn_SS90ER() {
 }
 
 void Mouse::turn_SS90EL() {
-  float run_in = 15.0;   // mm
-  float run_out = 10.0; // mm
+  float run_in = 10.0;   // mm
+  float run_out = 2.0; // mm
   float angle = 90.0;   // deg
   float omega = 280;    // deg/s
   float alpha = 4000;   // deg/s/s
   bool triggered = false;
   disable_steering();
   float distance = 190.0 + run_in - forward.position();
-  forward.start(distance, forward.speed(), DEFAULT_TURN_SPEED, SEARCH_ACCELERATION);
+  forward.start(distance, forward.speed(), turnSpeed, SEARCH_ACCELERATION);
   while (not forward.is_finished()) {
     delay(2);
     if (g_front_wall_sensor > FRONT_START_TURN) {
@@ -278,7 +278,7 @@ void Mouse::turn_around() {
   forward.stop();
   spin_turn(-180, SPEEDMAX_SPIN_TURN, SPIN_TURN_ACCELERATION);
   enable_steering();
-  forward.start(80, SPEEDMAX_EXPLORE, SPEEDMAX_EXPLORE, SEARCH_ACCELERATION);
+  forward.start(80, forwardSpeed, forwardSpeed, SEARCH_ACCELERATION);
   while (not forward.is_finished()) {
     delay(2);
   }
@@ -287,7 +287,11 @@ void Mouse::turn_around() {
 
 //***************************************************************************//
 
-Mouse::Mouse() {
+Mouse::Mouse( unsigned int forwardSpeed,
+              unsigned int turnSpeed) :  
+        forwardSpeed(forwardSpeed),
+        turnSpeed(turnSpeed)
+{
   init();
 }
 
@@ -335,7 +339,7 @@ void Mouse::follow_to(unsigned char target) {
   enable_sensors();
   reset_drive_system();
   enable_motor_controllers();
-  forward.start(BACK_WALL_TO_CENTER, SPEEDMAX_EXPLORE, SPEEDMAX_EXPLORE, SEARCH_ACCELERATION);
+  forward.start(BACK_WALL_TO_CENTER, forwardSpeed, forwardSpeed, SEARCH_ACCELERATION);
   while (not forward.is_finished()) {
     delay(2);
   }
@@ -453,7 +457,7 @@ int Mouse::search_to(unsigned char target) {
       delay(2);
     }
   }
-  forward.start(BACK_WALL_TO_CENTER, SPEEDMAX_EXPLORE, SPEEDMAX_EXPLORE, SEARCH_ACCELERATION);
+  forward.start(BACK_WALL_TO_CENTER, forwardSpeed, forwardSpeed, SEARCH_ACCELERATION);
   while (not forward.is_finished()) {
     delay(2);
   }
@@ -488,7 +492,7 @@ int Mouse::search_to(unsigned char target) {
       switch (hdgChange) {
         case 0: // ahead
           forward.adjust_position(-180);
-          forward.set_target_speed(SPEEDMAX_EXPLORE);
+          forward.set_target_speed(forwardSpeed);
           log_status('F');
           wait_until_position(170);
           log_status('x');
@@ -1055,4 +1059,11 @@ void Mouse::print_path() {
     Serial.print(path[i]);
   }
   Serial.println('\r');
+}
+
+void Mouse::set_speeds( unsigned int forwardSpeed,
+                        unsigned int turnSpeed)
+{
+  this->forwardSpeed = forwardSpeed;
+  this->turnSpeed = turnSpeed;
 }

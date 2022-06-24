@@ -87,19 +87,23 @@ void run_mouse(int function) {
       user_log_front_sensor();
       break;
     case 2:
-      // enter your function call here
-      enable_sensors();
-      while(1)
       {
-        dorothy.update_sensors();
-        print_justified(get_left_sensor(), 3);
-        Serial.print('/');
-        print_justified(get_front_sensor(), 3);
-        Serial.print('/');
-        print_justified(get_right_sensor(), 3);
-        Serial.print(' ');
-        dorothy.report_status();
-        delay(50);
+        Mouse dorothy(SPEEDMAX_EXPLORE, DEFAULT_TURN_SPEED);
+        // enter your function call here
+        enable_sensors();
+        while(1)
+        {
+          dorothy.update_sensors();
+          print_justified(get_left_sensor(), 3);
+          Serial.print('/');
+          print_justified(get_front_sensor(), 3);
+          Serial.print('/');
+          print_justified(get_right_sensor(), 3);
+          Serial.print(' ');
+          dorothy.report_status();
+          Serial.println('\r');
+          delay(50);
+        }
       }
       break;
     case 3:
@@ -311,27 +315,42 @@ void run_mouse(int function) {
       test_spin_turn(-90);
       break;
     case 13:
-      // reserved
-      //user_test_back_wall_start();
-      Serial.println("Run Maze\r");
-      dorothy.run_maze();
+      {
+        Mouse dorothy(SPEEDMAX_EXPLORE, DEFAULT_TURN_SPEED);
+        // reserved
+        //user_test_back_wall_start();
+        Serial.println("Run Maze\r");
+        dorothy.run_maze();
+      }
       break;
     case 14:
-      Serial.println("Search TO\r");
-      dorothy.handStart = true;
-      dorothy.location = START;
-      dorothy.heading = NORTH;
-      dorothy.search_to(maze_goal());
-      dorothy.handStart = false;
-      dorothy.search_to(START);
-
-      dorothy.search_to(maze_goal());
-      dorothy.search_to(START);
-
+      {
+        Mouse dorothy(SPEEDMAX_EXPLORE, DEFAULT_TURN_SPEED);
+        Serial.println("Search TO\r");
+        dorothy.handStart = true;
+        dorothy.location = START;
+        dorothy.heading = NORTH;
+        dorothy.search_to(maze_goal());
+        dorothy.handStart = false;
+        dorothy.search_to(START);
+        
+        // Second run, faster
+        dorothy.set_speeds(SPEEDMAX_EXPLORE_FASTER, DEFAULT_TURN_SPEED);
+        dorothy.search_to(maze_goal());
+        dorothy.search_to(START);
+        
+        // 3rd run, max speed
+        dorothy.set_speeds(SPEEDMAX_EXPLORE_FASTER + 100, DEFAULT_TURN_SPEED + 50);
+        dorothy.search_to(maze_goal());
+        dorothy.search_to(START);
+      }
       break;
     case 15:
-      Serial.println("Follow TO\r");
-      dorothy.follow_to(maze_goal());
+      {
+        Mouse dorothy(SPEEDMAX_EXPLORE, DEFAULT_TURN_SPEED);
+        Serial.println("Follow TO\r");
+        dorothy.follow_to(maze_goal());
+      }
       break;
     default:
       disable_sensors();

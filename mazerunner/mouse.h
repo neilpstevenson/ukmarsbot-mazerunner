@@ -36,6 +36,7 @@
 #define SEARCH_ACCELERATION 3000
 #define SPIN_TURN_ACCELERATION 3600
 #define SPEEDMAX_EXPLORE 400
+#define SPEEDMAX_EXPLORE_FASTER 500
 #define SPEEDMAX_STRAIGHT 800
 #define SPEEDMAX_SMOOTH_TURN 500
 #define SPEEDMAX_SPIN_TURN 360
@@ -51,7 +52,7 @@ enum {
 /// TODO: should the whole mouse object be persistent?
 class Mouse {
   public:
-  Mouse();
+  Mouse(unsigned int forwardSpeed, unsigned int turnSpeed);
   void init();
   void report_status();
   void update_sensors();
@@ -72,6 +73,7 @@ class Mouse {
   bool make_path(unsigned char startCell);
   void expand_path(char *pathString);
   void print_path();
+  void set_speeds(unsigned int forwardSpeed, unsigned int turnSpeed);
 
   unsigned char heading;
   unsigned char location;
@@ -79,6 +81,8 @@ class Mouse {
   bool frontWall;
   bool rightWall;
   bool handStart;
+  unsigned int forwardSpeed;
+  unsigned int turnSpeed;
 };
 
 extern char p_mouse_state;
@@ -86,6 +90,6 @@ extern char p_mouse_state;
 extern char path[];
 extern char commands[];
 
-extern Mouse dorothy;
+//extern Mouse dorothy;
 
 #endif //MOUSE_H
